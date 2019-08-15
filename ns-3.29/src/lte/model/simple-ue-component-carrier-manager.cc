@@ -90,8 +90,8 @@ public:
   SimpleUeCcmMacSapUser  (SimpleUeComponentCarrierManager* mac);
 
   // inherited from LteMacSapUser
-  virtual void NotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId, uint8_t componentCarrierId, uint16_t rnti, uint8_t lcid);
-  virtual void ReceivePdu (Ptr<Packet> p, uint16_t rnti, uint8_t lcid);
+  virtual void NotifyTxOpportunity (LteMacSapUser::TxOpportunityParameters txOpParams);
+  virtual void ReceivePdu (LteMacSapUser::ReceivePduParameters params);
   virtual void NotifyHarqDeliveryFailure ();
 
 
@@ -105,17 +105,17 @@ SimpleUeCcmMacSapUser::SimpleUeCcmMacSapUser (SimpleUeComponentCarrierManager* m
 }
 
 void
-SimpleUeCcmMacSapUser::NotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId, uint8_t componentCarrierId, uint16_t rnti, uint8_t lcid)
+SimpleUeCcmMacSapUser::NotifyTxOpportunity (LteMacSapUser::TxOpportunityParameters txOpParams)
 {
-  NS_LOG_INFO ("SimpleUeCcmMacSapUser::NotifyTxOpportunity for ccId:"<<(uint32_t)componentCarrierId);
-  m_mac->DoNotifyTxOpportunity (bytes, layer, harqId, componentCarrierId, rnti, lcid);
+  NS_LOG_INFO ("SimpleUeCcmMacSapUser::NotifyTxOpportunity for ccId:"<<(uint32_t)txOpParams.componentCarrierId);
+  m_mac->DoNotifyTxOpportunity (txOpParams);
 }
 
 
 void
-SimpleUeCcmMacSapUser::ReceivePdu (Ptr<Packet> p, uint16_t rnti, uint8_t lcid)
+SimpleUeCcmMacSapUser::ReceivePdu (LteMacSapUser::ReceivePduParameters params)
 {
-  m_mac->DoReceivePdu (p, rnti, lcid);
+  m_mac->DoReceivePdu (params);
 }
 
 void
@@ -233,22 +233,22 @@ SimpleUeComponentCarrierManager::DoNotifyHarqDeliveryFailure ()
 
 
 void 
-SimpleUeComponentCarrierManager::DoNotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId, uint8_t componentCarrierId, uint16_t rnti, uint8_t lcid)
+SimpleUeComponentCarrierManager::DoNotifyTxOpportunity (LteMacSapUser::TxOpportunityParameters txOpParams)
 {
   NS_LOG_FUNCTION (this);
-  std::map<uint8_t, LteMacSapUser*>::iterator lcidIt = m_lcAttached.find (lcid);
-  NS_ASSERT_MSG (lcidIt != m_lcAttached.end (), "could not find LCID" << lcid);
-  NS_LOG_DEBUG (this << " lcid= " << (uint32_t) lcid << " layer= " << (uint16_t) layer << " componentCarierId " << (uint16_t) componentCarrierId << " rnti " << rnti);
-  (*lcidIt).second->NotifyTxOpportunity (bytes, layer, harqId, componentCarrierId, rnti, lcid);
+  std::map<uint8_t, LteMacSapUser*>::iterator lcidIt = m_lcAttached.find (txOpParams.lcid);
+  NS_ASSERT_MSG (lcidIt != m_lcAttached.end (), "could not find LCID" << txOpParams.lcid);
+  NS_LOG_DEBUG (this << " lcid= " << (uint32_t) txOpParams.lcid << " layer= " << (uint16_t) txOpParams.layer << " componentCarierId " << (uint16_t) txOpParams.componentCarrierId << " rnti " << txOpParams.rnti);
+  (*lcidIt).second->NotifyTxOpportunity (txOpParams);
 }
 void
-SimpleUeComponentCarrierManager::DoReceivePdu (Ptr<Packet> p, uint16_t rnti, uint8_t lcid)
+SimpleUeComponentCarrierManager::DoReceivePdu (LteMacSapUser::ReceivePduParameters params)
 {
   NS_LOG_FUNCTION (this);
-  std::map<uint8_t, LteMacSapUser*>::iterator lcidIt = m_lcAttached.find (lcid);
+  std::map<uint8_t, LteMacSapUser*>::iterator lcidIt = m_lcAttached.find (params.lcid);
   if (lcidIt != m_lcAttached.end ())
     {
-      (*lcidIt).second->ReceivePdu (p, rnti, lcid);
+      (*lcidIt).second->ReceivePdu (params);
     }
 }
 

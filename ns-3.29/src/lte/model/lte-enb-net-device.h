@@ -204,14 +204,14 @@ public:
    *
    */
 
-  void SetCcMap (std::map< uint8_t, Ptr<ComponentCarrierEnb> > ccm);
+  void SetCcMap (std::map< uint8_t, Ptr<ComponentCarrierBaseStation> > ccm);
 
   /**
    * \returns  The Component Carrier Map of the Enb.
    *
    */
 
-  std::map< uint8_t, Ptr<ComponentCarrierEnb> >  GetCcMap (void);
+  std::map< uint8_t, Ptr<ComponentCarrierBaseStation> >  GetCcMap (void);
 
 protected:
   // inherited from Object
@@ -253,7 +253,7 @@ private:
   uint16_t m_csgId; ///< CSG ID
   bool m_csgIndication; ///< CSG indication
 
-  std::map < uint8_t, Ptr<ComponentCarrierEnb> > m_ccMap; /**< ComponentCarrier map */
+  std::map < uint8_t, Ptr<ComponentCarrierBaseStation> > m_ccMap; /**< ComponentCarrier map */
   
   Ptr<LteEnbComponentCarrierManager> m_componentCarrierManager; ///< the component carrier manager of this eNb
 

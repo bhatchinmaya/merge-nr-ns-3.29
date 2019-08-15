@@ -1427,7 +1427,7 @@ UeManager::BuildNonCriticalExtentionConfigurationCa ()
           ccId++;
         }
 
-      Ptr<ComponentCarrierEnb> eNbCcm = it.second;
+      Ptr<ComponentCarrierBaseStation> eNbCcm = it.second;
       LteRrcSap::SCellToAddMod component;
       component.sCellIndex = ccId;
       component.cellIdentification.physCellId = eNbCcm->GetCellId ();
@@ -1518,7 +1518,7 @@ LteEnbRrc::LteEnbRrc ()
 }
 
 void
-LteEnbRrc::ConfigureCarriers (std::map<uint8_t, Ptr<ComponentCarrierEnb>> ccPhyConf)
+LteEnbRrc::ConfigureCarriers (std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> ccPhyConf)
 {
   NS_ASSERT_MSG (!m_carriersConfigured, "Secondary carriers can be configured only once.");
   m_componentCarrierPhyConf = ccPhyConf;
@@ -2015,7 +2015,7 @@ LteEnbRrc::AddUeMeasReportConfig (LteRrcSap::ReportConfigEutra config)
 }
 
 void
-LteEnbRrc::ConfigureCell (std::map<uint8_t, Ptr<ComponentCarrierEnb>> ccPhyConf)
+LteEnbRrc::ConfigureCell (std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> ccPhyConf)
 {
   auto it = ccPhyConf.begin ();
   NS_ASSERT (it != ccPhyConf.end ());

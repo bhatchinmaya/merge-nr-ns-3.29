@@ -62,12 +62,12 @@ public:
    * \param rnti the RNTI
    * \param lcid the LCID
    */
-  virtual void DoNotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId, uint8_t componentCarrierId, uint16_t rnti, uint8_t lcid);
+  virtual void DoNotifyTxOpportunity (LteMacSapUser::TxOpportunityParameters txOpParams);
     /**
    * Notify HARQ delivery failure
    */
   virtual void DoNotifyHarqDeliveryFailure ();
-  virtual void DoReceivePdu (Ptr<Packet> p, uint16_t rnti, uint8_t lcid);
+  virtual void DoReceivePdu (LteMacSapUser::ReceivePduParameters rxPduParams);
 
 private:
   /**

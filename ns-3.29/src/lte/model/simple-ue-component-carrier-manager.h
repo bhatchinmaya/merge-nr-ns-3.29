@@ -89,7 +89,7 @@ protected:
    * \brief Report buffer status function
    * \param params LteMacSapProvider::ReportBufferStatusParameters
    */
-  void DoReportBufferStatus (LteMacSapProvider::ReportBufferStatusParameters params);
+  virtual void DoReportBufferStatus (LteMacSapProvider::ReportBufferStatusParameters params);
   /// Notify HARQ deliver failure
   void DoNotifyHarqDeliveryFailure ();
   // forwarded from LteMacSapUser
@@ -102,14 +102,14 @@ protected:
    * \param rnti the RNTI
    * \param lcid the LCID
    */
-  void DoNotifyTxOpportunity (uint32_t bytes, uint8_t layer, uint8_t harqId, uint8_t componentCarrierId, uint16_t rnti, uint8_t lcid);
+  void DoNotifyTxOpportunity (LteMacSapUser::TxOpportunityParameters txOpParams);
   /**
    * \brief Receive PDU function
    * \param p the packet
    * \param rnti the RNTI
    * \param lcid the LCID
    */
-  void DoReceivePdu (Ptr<Packet> p, uint16_t rnti, uint8_t lcid);
+  void DoReceivePdu (LteMacSapUser::ReceivePduParameters params);
   //forwarded from LteUeCcmRrcSapProvider
   /**
    * \brief Add LC function
@@ -118,7 +118,7 @@ protected:
    * \param msu the MSU
    * \returns updated LC config list
    */
-  std::vector<LteUeCcmRrcSapProvider::LcsConfig> DoAddLc (uint8_t lcId,  LteUeCmacSapProvider::LogicalChannelConfig lcConfig, LteMacSapUser* msu);
+  virtual std::vector<LteUeCcmRrcSapProvider::LcsConfig> DoAddLc (uint8_t lcId,  LteUeCmacSapProvider::LogicalChannelConfig lcConfig, LteMacSapUser* msu);
   /**
    * \brief Remove LC function
    * \param lcid the LCID
@@ -134,7 +134,7 @@ protected:
    * \param msu the MSU
    * \returns LteMacSapUser *
    */
-  LteMacSapUser* DoConfigureSignalBearer (uint8_t lcId,  LteUeCmacSapProvider::LogicalChannelConfig lcConfig, LteMacSapUser* msu);
+  virtual LteMacSapUser* DoConfigureSignalBearer (uint8_t lcId,  LteUeCmacSapProvider::LogicalChannelConfig lcConfig, LteMacSapUser* msu);
   
 private:
   
