@@ -89,9 +89,10 @@ LteRlcUm::DoTransmitPdcpPdu (Ptr<Packet> p)
   if (m_txBufferSize + p->GetSize () <= m_maxTxBufferSize)
     {
       /** Store arrival time */
+      /*
       RlcTag timeTag (Simulator::Now ());
       p->AddPacketTag (timeTag);
-
+      */
       /** Store PDCP PDU */
 
       LteRlcSduStatusTag tag;
@@ -378,8 +379,10 @@ LteRlcUm::DoNotifyTxOpportunity (LteMacSapUser::TxOpportunityParameters txOpPara
   packet->AddHeader (rlcHeader);
 
   // Sender timestamp
+  /*
   RlcTag rlcTag (Simulator::Now ());
   packet->ReplacePacketTag (rlcTag);
+  */
   m_txPdu (m_rnti, m_lcid, packet->GetSize ());
 
   // Send RLC PDU to MAC layer
@@ -412,11 +415,14 @@ LteRlcUm::DoReceivePdu (LteMacSapUser::ReceivePduParameters rxPduParams)
   NS_LOG_FUNCTION (this << m_rnti << (uint32_t) m_lcid << rxPduParams.p->GetSize ());
 
   // Receiver timestamp
-  RlcTag rlcTag;
+  
   Time delay;
+  /*
+  RlcTag rlcTag;
   NS_ASSERT_MSG (rxPduParams.p->PeekPacketTag (rlcTag), "RlcTag is missing");
   rxPduParams.p->RemovePacketTag (rlcTag);
   delay = Simulator::Now() - rlcTag.GetSenderTimestamp ();
+  */
   m_rxPdu (m_rnti, m_lcid, rxPduParams.p->GetSize (), delay.GetNanoSeconds ());
 
   // 5.1.2.2 Receive operations
@@ -1123,11 +1129,12 @@ LteRlcUm::DoReportBufferStatus (void)
 
   if (! m_txBuffer.empty ())
     {
+    /*
       RlcTag holTimeTag;
       NS_ASSERT_MSG (m_txBuffer.front ()->PeekPacketTag (holTimeTag), "RlcTag is missing");
       m_txBuffer.front ()->PeekPacketTag (holTimeTag);
       holDelay = Simulator::Now () - holTimeTag.GetSenderTimestamp ();
-
+     */
       queueSize = m_txBufferSize + 2 * m_txBuffer.size (); // Data in tx queue + estimated headers size
     }
 

@@ -1080,7 +1080,7 @@ UeManager::RecvMeasurementReport (LteRrcSap::MeasurementReport msg)
       m_rrc->m_anrSapProvider->ReportUeMeas (msg.measResults);
     }
 
-  if ((m_rrc->m_ffrRrcSapProvider.at (0) != 0)
+  if ((m_rrc->m_ffrRrcSapProvider.size () > 0)
       && (m_rrc->m_ffrMeasIds.find (measId) != m_rrc->m_ffrMeasIds.end ()))
     {
       // this measurement was requested by the FFR function
@@ -1514,7 +1514,7 @@ LteEnbRrc::LteEnbRrc ()
   m_ccmRrcSapUser = new MemberLteCcmRrcSapUser <LteEnbRrc>(this);
   m_cphySapProvider.push_back (0);
   m_cmacSapProvider.push_back (0);
-  m_ffrRrcSapProvider.push_back (0);
+  //m_ffrRrcSapProvider.push_back (0);
 }
 
 void
@@ -1821,14 +1821,29 @@ void
 LteEnbRrc::SetLteFfrRrcSapProvider (LteFfrRrcSapProvider * s)
 {
   NS_LOG_FUNCTION (this << s);
-  m_ffrRrcSapProvider.at (0) = s;
+   if (m_ffrRrcSapProvider.size () > 0)
+    {
+      m_ffrRrcSapProvider.at (0) = s;
+    }
+  else
+    {
+      m_ffrRrcSapProvider.push_back (s);
+    }
 }
 
 void
 LteEnbRrc::SetLteFfrRrcSapProvider (LteFfrRrcSapProvider * s, uint8_t index)
 {
   NS_LOG_FUNCTION (this << s);
-  m_ffrRrcSapProvider.at (index) = s;
+  if (m_ffrRrcSapProvider.size () > index)
+    {
+      m_ffrRrcSapProvider.at (index) = s;
+    }
+  else
+    {
+      m_ffrRrcSapProvider.push_back (s);
+      NS_ABORT_IF (m_ffrRrcSapProvider.size () - 1 != index);
+    }
 }
 
 LteFfrRrcSapUser*
@@ -2033,8 +2048,11 @@ LteEnbRrc::ConfigureCell (std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> cc
       m_cphySapProvider.at (it.first)->SetEarfcn (it.second->GetUlEarfcn (), it.second->GetDlEarfcn ());
       m_cphySapProvider.at (it.first)->SetCellId (it.second->GetCellId ());
       m_cmacSapProvider.at (it.first)->ConfigureMac (it.second->GetUlBandwidth (), it.second->GetDlBandwidth ());
-      m_ffrRrcSapProvider.at (it.first)->SetCellId (it.second->GetCellId ());
-      m_ffrRrcSapProvider.at (it.first)->SetBandwidth (it.second->GetUlBandwidth (), it.second->GetDlBandwidth ());
+     if (m_ffrRrcSapProvider.size () > it.first)
+        {
+          m_ffrRrcSapProvider.at (it.first)->SetCellId (it.second->GetCellId ());
+          m_ffrRrcSapProvider.at (it.first)->SetBandwidth (it.second->GetUlBandwidth (), it.second->GetDlBandwidth ());
+        }
     }
 
   m_dlEarfcn = dlEarfcn;

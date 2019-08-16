@@ -48,7 +48,6 @@
 
 #include <map>
 #include <set>
-#include <ns3/component-carrier.h>
 #include <ns3/component-carrier-enb.h>
 #include <vector>
 
@@ -857,7 +856,7 @@ public:
    *
    * \param ccPhyConf the component carrier configuration
    */
-  void ConfigureCell (std::map<uint8_t, Ptr<ComponentCarrierBaseStation>> ccPhyConf);
+  void ConfigureCell (std::map<uint8_t, Ptr<ComponentCarrierBaseStation> > ccPhyConf);
 
   /**
    * \brief Configure carriers.
